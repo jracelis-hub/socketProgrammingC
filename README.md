@@ -1,33 +1,10 @@
 # Socket Programming in C
 
-## Table of Contents
-
-* [_Introduction_](#introduction)
-	* [_Concepts & Terminology_](#concept-&-terminology)
-## Introduction
-
-### Concepts & Terminology
-
-Before I get into ***sockets*** it is good to know the many concepts that are mentioned such as acrynoms or other descriptions. Here I am highlighting the items below to refer back to if it has been mentioned. I am a person when reading and understanding concepts I can visualize the concept better in my head if I knew the actually name rather than the acrynom. All the following terms I just searched up and basically copied and pasted just to have these concepts in a centralized location. If interested go right and head read/search more on the following concepts to get a better understanding.
-
-* **IP (Internet Protocol)** -
-	* **IPv4 (Internet Protocol version 4)** -
-	* **IPv6 (Internet Protocol version 6)** -
-* **TCP (Transport Control Protocol)** -
-* **UDP (User Datagram Protocol)** -
-* **Ports** -
-* **TCP/IP** -
-* **BSD (Berkeley Software Distribution)** -
-* **Internet Domain (INET)** -
-* **IPC (Inter-Process Communication)** -
-* **Big-Endian** -
-* **Little-Endian** -
-
 ### Sockets
 
 What is a ***socket***?
 
-A ***socket*** is a way to communicate between two programs via software, either on the same machine or across a network. It is a way of opening up a _door_ to recieve and send data through inter-process communication (IPC) and network interactions.
+A ***socket*** is a way to communicate between two programs via software, either on the same machine or across a network.
 
 The sockets API in was released in 1983 under the 4.2BSD (_Berkeley Software Distribution_) Unix operating system.
 
@@ -45,37 +22,15 @@ Types of ***Sockets***:
 
 3.) ***Raw Sockets (SOCK_RAW)*** - Provides access to low-level network protocols and interfaces. Ordinary user programs usually have no need to use this style. 
 
-## Roles Client/Server
+**Server** - Provides a specific service depending to the client request, usually over the internet
 
+**Client** - Request services or reasource from a server over a network.
 
-**Server** - Sends data to your computer over the internet.
+### Requirements
 
-Role of **Server**:
+The purpose of this service is to send a request (`client`) and the (`server`) will respond accordingly to what is needs.
 
-* Provides the data
-* Waits for incoming connections
+The server will be sitting on the Raspberry Pi IPv4 address, using TCP and and its own port 8080.
 
-**Client** - Sends and recieves data from the server.
-
-Role of **Client**:
-
-* Initiates the connection
-* Identifies the server by name or IP address, and a port
-
-Purpose of client/server model is to exchange information.
-
-## TCP Client
-
-Functions used:
-
-`getaddrinfo()`
-
-`socket()`
-
-`connect()`
-
-`send()`
-
-`recv()`
-
-`close()`
+> [!NOTE]
+> To ensure the IP address does not change, be sure to set the RPi address statically. I achieved this by changing my DHCP settings to a specific range and leaving a section of host unused.
