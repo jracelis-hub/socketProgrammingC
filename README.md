@@ -34,3 +34,26 @@ The server will be sitting on the Raspberry Pi IPv4 address, using TCP and and i
 
 > [!NOTE]
 > To ensure the IP address does not change, be sure to set the RPi address statically. I achieved this by changing my DHCP settings to a specific range and leaving a section of host unused.
+
+The following Socket APIs will be used:
+
+This will only use IPv4 address.
+
+TCP Server:
+- getaddrinfo()
+- socket()
+- bind()
+- listen()
+- getnameinfo()
+- select()
+- accept()
+- send() and recv()
+- close()
+
+TCP Client:
+- getaddrinfo()
+- socket()
+- connect()
+- send() and recv()
+- close()
+
