@@ -1,6 +1,20 @@
 # Socket Programming in C
 
-### Sockets
+## Project Statement
+
+With this project, I wanted to challenge myself in learning networking programming on a lower level. While there are many protocols and services to transfer files from one device to another `scp` `ftp` `ftps`... etc, I thought this would be a great learning experience to create my own file transfer program in C.
+
+After gaining knowledge on the Linux OS and intercommunication that is happening between embedded devices on my current job, I thought this would a great way to test my skills but also strengthen my ability to understand networking and systems on a lower level.
+
+## Design Philosophy
+
+Since I have been working with Unix based systems, I wanted to design this program to be as POSIX (Portable Operating System Interface) compliant as possible. Emphasising on portablility.
+
+As far as the network stack, it will consist of using **TCP** and only support IPv4... but with a couple tweeks it could also support IPv6. The purpose of using **TCP** is to ensure the proper data is transfered over the network with consistent reliability. 
+
+Although encryption is essential when sending data over the internet for security and privacy, this program will not include it as the transfers will partake within my LAN (local area network).
+
+## Sockets Background
 
 What is a ***socket***?
 
@@ -24,36 +38,5 @@ Types of ***Sockets***:
 
 **Server** - Provides a specific service depending to the client request, usually over the internet
 
-**Client** - Request services or reasource from a server over a network.
-
-### Requirements
-
-The purpose of this service is to send a request (`client`) and the (`server`) will respond accordingly to what is needs.
-
-The server will be sitting on the Raspberry Pi IPv4 address, using TCP and and its own port 8080.
-
-> [!NOTE]
-> To ensure the IP address does not change, be sure to set the RPi address statically. I achieved this by changing my DHCP settings to a specific range and leaving a section of host unused.
-
-The following Socket APIs will be used:
-
-This will only use IPv4 address.
-
-TCP Server:
-- getaddrinfo()
-- socket()
-- bind()
-- listen()
-- getnameinfo()
-- select()
-- accept()
-- send() and recv()
-- close()
-
-TCP Client:
-- getaddrinfo()
-- socket()
-- connect()
-- send() and recv()
-- close()
+**Client** - Request services or resources from a server over a network.
 
