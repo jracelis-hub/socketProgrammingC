@@ -20,10 +20,11 @@
 
 /*     My Macros                     */
 #define BUFFER                     1024
-#define IP_MAX_LEN                   16
-#define PORT_MAX_LEN                  6
-#define IP_MIN_LEN                    8 /* 10.0.0.0 + '\0' */
+#define IP_MAX_LEN                   16 /* xxx.xxx.xxx.xxx + \0 */
+#define PORT_MAX_LEN                  6 /* xxxxx + \0 */
+#define IP_MIN_LEN                    8 /* 10.0.0.0 */
 #define BACKLOG                      10
+
 /*     User Created Functions        */
 void format(int count,const char character);
 void usage(char *argv[]);
