@@ -67,7 +67,7 @@ Raspbian
 
 ## Initial Testing
 
-The [version_0](src/Version_0/networking.c) was to create the bare skeleteon of the program itself to check for any error handling and to validate if the user input arguments are within the lengths of IPv4 and not utilizing any of the known ports below 1024. 
+The [version_0](src/Version_0/my_networking.c) was to create the bare skeleteon of the program itself to check for any error handling and to validate if the user input arguments are within the lengths of IPv4 and not utilizing any of the known ports below 1024. 
 
 Although it does not catch proper formatting when entering the first command line argument for IPv4 in the form for of:
 
@@ -87,4 +87,4 @@ It does have a min and max value of the string length that the user can input fo
 My initial testing consist of:
 
 - Proper command line 
-See source code [version](src/Version_0/networking.c)
+See source code [version](src/Version_0/my_networking.c)

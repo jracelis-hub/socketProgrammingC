@@ -39,6 +39,9 @@ void start_server(char *argv[]) {
 	   Error Validation     */
 	int sock_fd, status, client_fd;
 
+	/* Structure to hold information for the server */
+	struct addrinfo hints, *server;
+
 	/* Command line arguments from user
 	   IPv4 max character = 15 + '\0' = 16
 	   Port max character = 5 + '\0' = 6  */
@@ -54,9 +57,26 @@ void start_server(char *argv[]) {
 	char host_port[NI_MAXSERV];
 	socklen_t host_port_len;
 
-	/* Structure to hold information for the server */
-	struct addrinfo hints, *server;
+	/* Information to send and rec */
+	struct methods requests = { "Get","Put","List","Read"};
 	
+	/* Copying command line arguments into: 
+	   IPv4: 192.168.0.241 or
+	   Local: 127.0.0.1
+	   Port: 8000                        */
+	if ( strlen(argv[1]) < IP_MAX_LEN && 
+		 strlen(argv[1]) > IP_MIN_LEN &&
+	     strlen(argv[2]) < PORT_MAX_LEN)
+	{
+		strcpy(ip,argv[1]);	
+		strcpy(port,argv[2]);	
+	}
+	else {
+		error_msg("The given arguments are out of max character range");
+		usage(argv);
+		exit(1);
+	}
+
 	/* Important to zero out any information in the hints structure             
 	   Server Type:
 	   IPv4
@@ -68,22 +88,6 @@ void start_server(char *argv[]) {
 	hints.ai_protocol = 0;
 	hints.ai_flags = 0;
 
-	/* Copying command line arguments into: 
-	   IPv4: 192.168.0.241 or
-	   Local: 127.0.0.1
-	   Port: 8000                        */
-	if ( strlen(argv[1]) < IP_MAX_LEN && 
-	     strlen(argv[2]) < PORT_MAX_LEN &&
-		 strlen(argv[1]) > IP_MIN_LEN) 
-	{
-		strcpy(ip,argv[1]);	
-		strcpy(port,argv[2]);	
-	}
-	else {
-		error_msg("The given arguments are out of max character range");
-		usage(argv);
-		exit(1);
-	}
 
 	/* Resolve server information */
 	printf("Resolving server information...\n");
