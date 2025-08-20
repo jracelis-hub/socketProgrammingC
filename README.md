@@ -16,7 +16,7 @@ As far as the network stack, it will consist of using **TCP** and only support I
 
 Although encryption is essential when sending data over the internet for security and privacy, this program will not include it as the transfers will partake within my LAN (local area network).
 
-<img src="images/flow_chart.png"/>
+![program flow](images/flow_chart.png "Program Flow Chart")
 
 ## Sockets Background
 
