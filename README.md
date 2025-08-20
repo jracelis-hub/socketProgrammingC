@@ -49,7 +49,6 @@ To run the following program a linux environment is needed. I have tested this o
 Methods:
 
 WSL 
----
 
 To install WSL on Windows open up the command prompt and type:
 ```
@@ -63,7 +62,29 @@ Once installed, just type wsl on the command prompt and it will open the WSL ter
 > Also just use `window + r` and type wsl to open it.
 
 Ubuntu
----
 
 Raspbian
----
+
+## Initial Testing
+
+The [version_0](src/Version_0/networking.c) was to create the bare skeleteon of the program itself to check for any error handling and to validate if the user input arguments are within the lengths of IPv4 and not utilizing any of the known ports below 1024. 
+
+Although it does not catch proper formatting when entering the first command line argument for IPv4 in the form for of:
+
+- 127.0.0.1
+- 192.xxx.xxx.xxx
+- 172.xxx.xxx.xxx
+- 10.xxx.xxx.xxx
+
+It does have a min and max value of the string length that the user can input for example:
+
+- IP_MIN_LEN 10.0.0.0 = 8 + `'\0'` = 9
+- IP_MAX_LEN 192.xxx.xxx.xxx = 15 + `'\0'` = 16
+
+> [!NOTE]
+> See [my_network.h](src/Version_0/my_networking.h) for defined macros.
+
+My initial testing consist of:
+
+- Proper command line 
+See source code [version](src/Version_0/networking.c)
