@@ -40,3 +40,30 @@ Types of ***Sockets***:
 
 **Client** - Request services or resources from a server over a network.
 
+## Requirements
+
+To run the following program a linux environment is needed. I have tested this on WSL (Windows Subsystem for Linux) and Debian-based Linux distributions such as Ubuntu and Raspbian (Raspberry Pi OS).
+
+### Environment Setup
+
+Methods:
+
+WSL 
+---
+
+To install WSL on Windows open up the command prompt and type:
+```
+wsl --install
+```
+set up password and other installation requirements as prompted.
+
+Once installed, just type wsl on the command prompt and it will open the WSL terminal.
+
+> [!NOTE]
+> Also just use `window + r` and type wsl to open it.
+
+Ubuntu
+---
+
+Raspbian
+---
