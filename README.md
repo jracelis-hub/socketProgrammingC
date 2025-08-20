@@ -8,16 +8,6 @@ With this project, I wanted to challenge myself in learning networking programmi
 
 After gaining knowledge on the Linux OS and intercommunication that is happening between embedded devices on my current job, I thought this would a great way to test my skills but also strengthen my ability to understand networking and systems on a lower level.
 
-## Design Philosophy
-
-Since I have been working with Unix based systems, I wanted to design this program to be as POSIX (Portable Operating System Interface) compliant as possible. Emphasising on portablility.
-
-As far as the network stack, it will consist of using **TCP** and only support IPv4... but with a couple tweeks it could also support IPv6. The purpose of using **TCP** is to ensure the proper data is transfered over the network with consistent reliability. 
-
-Although encryption is essential when sending data over the internet for security and privacy, this program will not include it as the transfers will partake within my LAN (local area network).
-
-![program flow](images/flow_chart.png "Program Flow Chart")
-
 ## Sockets Background
 
 What is a ***socket***?
@@ -28,9 +18,9 @@ The sockets API in was released in 1983 under the 4.2BSD (_Berkeley Software Dis
 
 The two main type of ***Socket*** domains are:
 
-1.) ***Internet Domain (INET)*** - Used to communicate between process on different systems connected over a network via TCP/IP. Utilizes the 2 main IPs, `ipv4` 32 bit and `ipv6` 128 bit.
+1.) ***Internet Domain Sockets (INET)*** - Used to communicate between process on different systems connected over a network via TCP/IP or UDP/IP. Utilizes the 2 main IPs, `ipv4` 32 bit and `ipv6` 128 bit.
 
-2.) ***Unix DOMAIN (Unix)*** - 
+2.) ***Unix Domain Sockets (UDS)*** - is an inter-process communication mechanism that allows bidirectional data exchange between process running on the same machine.
 
 Types of ***Sockets***:
 
@@ -43,6 +33,16 @@ Types of ***Sockets***:
 **Server** - Provides a specific service depending to the client request, usually over the internet
 
 **Client** - Request services or resources from a server over a network.
+
+## Design Philosophy
+
+Since I have been working with Unix based systems, I wanted to design this program to be as POSIX (Portable Operating System Interface) compliant as possible. Emphasising on portablility.
+
+As far as the network stack, it will consist of using **TCP** and only support IPv4... but with a couple tweeks it could also support IPv6. The purpose of using **TCP** is to ensure the proper data is transfered over the network with consistent reliability. 
+
+Although encryption is essential when sending data over the internet for security and privacy, this program will not include it as the transfers will partake within my LAN (local area network).
+
+![program flow](images/flow_chart.png "Program Flow Chart")
 
 ## Requirements
 
