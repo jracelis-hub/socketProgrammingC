@@ -1,6 +1,6 @@
 #include "my_networking.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char **argv) {
 
 	if ( argc == 3 && atoi(argv[2]) > 1023 && atoi(argv[2]) < 65536 ) {
 		start_server(argv);
