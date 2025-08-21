@@ -1,5 +1,5 @@
-#ifndef MY_NETWORKING_H
-#define MY_NETWORKING_H
+#ifndef MY_NET_UTILS_H  
+#define MY_NET_UTILS_H  
 
 /* Standard C libraries for 
    I/O 
@@ -11,25 +11,22 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <pthread.h>
 
 /* Network API libraries */
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-#include <netinet/in.h>
+#include <arpa/inet.h>
 
 /* Macros */
 #define BUFFER         1024
 #define IP_MAX_LEN       16	      /* xxx.xxx.xxx.xxx + \0 */
 #define PORT_MAX_LEN      6	      /* xxxxx + \0 */
 #define IP_MIN_LEN        8       /* 10.0.0.0 */
-#define BACKLOG          10       /* Listen connections */
 
 /* Functions Prototypes */
 void format(int count,const char character);
 void usage(char **argv);
-void start_server(char **argv);
 void error_msg(const char *message);
 void pass_msg(void);
 
@@ -41,4 +38,12 @@ typedef struct {
 	const char *read;	/* To read a file from server into local stdout */
 } Methods_t;
 
-#endif /* MY_NETWORKING_H */
+#ifdef TEST_SERVER
+	void start_server(char **argv);
+#endif
+
+#ifdef TEST_CLIENT
+	void start_client(char **argv);
+#endif
+
+#endif /* MY_NET_UTILS_H */

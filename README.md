@@ -38,7 +38,9 @@ Types of ***Sockets***:
 
 Since I have been working with Unix based systems, I wanted to design this program to be as POSIX (Portable Operating System Interface) compliant as possible. Emphasising on portablility.
 
-As far as the network stack, it will consist of using **TCP** and only support IPv4... but with a couple tweeks it could also support IPv6. The purpose of using **TCP** is to ensure the proper data is transfered over the network with consistent reliability. 
+As far as the network stack, it will consist of using **TCP** and will only support IPv4... but with a couple tweeks it could also support IPv6. The purpose of using **TCP** is to ensure the proper data is transfered over the network with consistent reliability. 
+
+For handling multiple connections, I went with pthreads (POSIX) threads approach. Since, the amount requests client devices is less than 10 on my private network this would satisfy the performance needs without being too overkill and on using other APIs like `select()` or `poll()`. If scalability was a requirement then I would go with an alternative approach.
 
 Although encryption is essential when sending data over the internet for security and privacy, this program will not include it as the transfers will partake within my LAN (local area network).
 
