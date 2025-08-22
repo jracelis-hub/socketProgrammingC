@@ -21,7 +21,22 @@ void error_msg(const char *message) {
 	fprintf(stderr,"%s\n",message);
 }
 
-void pass_msg(void) {
+void clean_up(pid_t *proc_id,int *sock_fd,int *client_fd,struct addrinfo **server ) {
+
+	if ( proc_id != NULL ) fprintf(stderr,"Killing process: %d\n",*proc_id);
+	if ( sock_fd != NULL ) close(*sock_fd);
+	if ( client_fd != NULL ) close(*client_fd);
+	if ( server != NULL ) freeaddrinfo(*server);
+}
+
+void perform_task(const char *task_msg,int *task_id) {
+	(task_id == NULL) ? printf("%s\n",task_msg) : printf("%s %d\n",task_msg,*task_id);
+}
+
+void pass_msg(const char *task,int *task_id) {
+	if ( task != NULL && task_id != NULL ) {
+		printf("%s %d\n",task,*task_id);
+	}
 	int count = 35;	
 	for (int i=0; i < count; i++) {
 		putchar('-');

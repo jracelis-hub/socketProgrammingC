@@ -51,7 +51,7 @@ void start_server(char **argv) {
 
 	/* Get process id of the server running */
 	pid_t process_id = getpid();
-	printf("Created new process: %d\n",process_id);
+	perform_task("Created new process:",(int *)&process_id);
 
 	/* Copying command line arguments into: 
 	   IPv4: 192.168.0.241 or
@@ -65,7 +65,7 @@ void start_server(char **argv) {
 	else {
 		error_msg("The IPv4 address argv[1] is not a proper IPv4 format");
 		usage(argv);
-		printf("Process killed: %d\n",process_id);
+		clean_up(&process_id,NULL,NULL,NULL);
 		exit(1);
 	}
 
@@ -82,68 +82,59 @@ void start_server(char **argv) {
 
 
 	/* Resolve server information */
-	printf("Resolving server information...\n");
+	perform_task("Resolving server information...",NULL);
 	status = getaddrinfo(ip,port,&hints,&server);
 	if ( status < 0 ) {
 		error_msg("Could not resolve server information...");
-		printf("Process killed: %d\n",process_id);
+		clean_up(&process_id,NULL,NULL,NULL);
 		exit(1);
 	}
 
-	pass_msg();
+	pass_msg(NULL,NULL);
 	
 	/* Creates a socket descriptor to listen on */
-	printf("Creating socket...\n");
+	perform_task("Creating socket...",NULL);
 	sock_fd = socket(server->ai_family,server->ai_socktype,server->ai_protocol);
 	if ( sock_fd < 0 ) {
 		error_msg("Could not create a socket");
-		printf("Process killed: %d\n",process_id);
-		freeaddrinfo(server);
+		clean_up(&process_id,NULL,NULL,&server);
 		exit(1);
 	}
 
-	printf("Created Socket FD: %d\n",sock_fd);
-	pass_msg();
+	pass_msg("Created Socket FD:",&sock_fd);
 
 	/* Binds the socket with port and address */
-	printf("Binding socket to port and address...\n");
+	perform_task("Binding socket to port and address...",NULL);
 	status = bind(sock_fd,server->ai_addr,server->ai_addrlen);
 	if ( status < 0 ) {
 		error_msg("Could not bind socket to address and port");
-		printf("Process killed: %d\n",process_id);
-		close(sock_fd);
-		freeaddrinfo(server);
+		clean_up(&process_id,&sock_fd,NULL,&server);
 		exit(1);
 	}
 
-	pass_msg();
+	pass_msg(NULL,NULL);
 
 	/* Socket so now ready to listen to any incoming requests 
 	   Max backlog connections is 10                       */
-	printf("Setting up socket for listening...\n");
+	perform_task("Setting up socket for listening...",NULL);
 	status = listen(sock_fd,BACKLOG);
 	if ( status < 0 ) {
 		error_msg("Could not set up socket for listening.");
-		printf("Process killed: %d\n",process_id);
-		close(sock_fd);
-		freeaddrinfo(server);
+		clean_up(&process_id,&sock_fd,NULL,&server);
 		exit(1);
 	}
 
 	/* This structure is no longer needed */
-	freeaddrinfo(server);
-	pass_msg();
+	clean_up(NULL,NULL,NULL,&server);
+	pass_msg(NULL,NULL);
 
 	/* The socket is now waiting for any incoming connections
 	   if accepted a new socket descriptor is created      */
-	printf("Waiting to accept connections...\n");
+	perform_task("Waiting to accept connections...",NULL);
 	client_len = sizeof(client_in);
 	client_fd = accept(sock_fd,(struct sockaddr*)&client_in,&client_len);
 	if ( client_fd < 0 ) {
 		error_msg("Could not accept the connection.");
-		printf("Process killed: %d\n",process_id);
-		close(sock_fd);
-		exit(1);
 	}
 
 	/* Getting clients information */
@@ -155,10 +146,7 @@ void start_server(char **argv) {
 						 NI_NUMERICHOST | NI_NUMERICSERV);
 	if ( status < 0 ) {
 		error_msg("Could not get host IPv4 address or Port");
-		printf("Process killed: %d\n",process_id);
-		close(client_fd);
-		close(sock_fd);
-		exit(1);
+		clean_up(NULL,NULL,&client_fd,NULL);
 	}
 
 	/* Once accepted print out IPv4:Port that was accepted on server side */
@@ -168,9 +156,7 @@ void start_server(char **argv) {
 	bytes = send(client_fd,welcome_message,strlen(welcome_message),0);
 	if ( bytes == -1 ) {
 		error_msg("Could not send bytes to client");	
-		close(client_fd);
-		close(sock_fd);
-		exit(1);
+		clean_up(NULL,NULL,&client_fd,NULL);
 	}
 
 	while(1) {
@@ -182,8 +168,7 @@ void start_server(char **argv) {
 		bytes = recv(client_fd,recieve,sizeof(recieve),0);
 		if ( bytes == -1 ) {
 			error_msg("Could not recieve bytes from client");
-			close(client_fd);
-			close(sock_fd);
+			clean_up(NULL,NULL,&client_fd,NULL);
 			exit(1);
 		}
 
@@ -195,13 +180,12 @@ void start_server(char **argv) {
 			bytes = send(client_fd,response,strnlen(response,BUFFER),0);
 			if ( bytes == -1 ) {
 				error_msg("Could not send get response to client");
-				close(client_fd);
-				close(sock_fd);
+				clean_up(NULL,NULL,&client_fd,NULL);
 				exit(1);
 			}
 			printf("Server response complete...\n");
 			printf("Disconnecting from client...\n");
-			close(client_fd);
+			clean_up(NULL,NULL,&client_fd,NULL);
 			break;
 		}
 		else {
@@ -210,18 +194,15 @@ void start_server(char **argv) {
 			bytes = send(client_fd,response,strnlen(response,BUFFER),0);
 			if ( bytes == -1 ) {
 				error_msg("Could not send get response to client");
-				close(client_fd);
-				close(sock_fd);
+				clean_up(NULL,NULL,&client_fd,NULL);
 				exit(1);
 			}
 			error_msg("Invalid input disconnecting from client...");
-			close(client_fd);
-			close(sock_fd);
+			clean_up(NULL,NULL,&client_fd,NULL);
 			exit(1);
 		}
 	}
 
-	printf("Process killed: %d\n",process_id);
-	close(sock_fd);
+	clean_up(&process_id,&sock_fd,NULL,NULL);
 }
 #endif /* End TEST_SERVER */

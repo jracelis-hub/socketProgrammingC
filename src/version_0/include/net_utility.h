@@ -27,8 +27,10 @@
 /* Functions Prototypes */
 void format(int count,const char character);
 void usage(char **argv);
+void preform_task(const char *task_msg,int *task_id);
+void clean_up(pid_t *proc_id,int *sock_fd,int *client_fd,struct addrinfo **server ); /* If the follow does not need freeing put value as NULL */
 void error_msg(const char *message);
-void pass_msg(void);
+void pass_msg(const char *task,int *task_id);
 
 /* Server Methods */
 typedef struct {

@@ -23,7 +23,7 @@ void start_client(char **argv) {
 
 	/* Gives the process id of the FTP server */
 	pid_t process_id = getpid();
-	printf("Create new process: %d\n",process_id);
+	preform_task("Create new process:",(int *)&process_id);
 
 	if ( inet_pton(AF_INET,argv[1],ip) == 1 )
 	{
@@ -32,7 +32,7 @@ void start_client(char **argv) {
 	}
 	else {
 		error_msg("The given arguments are out of max character range");
-		printf("Process killed: %d\n",process_id);
+		clean_up(&process_id,NULL,NULL,NULL);
 		usage(argv);
 		exit(1);
 	}
@@ -49,30 +49,28 @@ void start_client(char **argv) {
 	hints.ai_flags = 0;
 
 	/* Resolve server information */
-	printf("Resolving server information...\n");
+	preform_task("Resolving server information...",NULL);
 	status = getaddrinfo(ip,port,&hints,&server);
 	if ( status < 0 ) {
 		error_msg("Could not resolve server information...");
-		printf("Process killed: %d\n",process_id);
+		clean_up(&process_id,NULL,NULL,NULL);
 		exit(1);
 	}
 
-	pass_msg();
+	pass_msg(NULL,NULL);
 	
 	/* Creates a socket descriptor to listen on */
-	printf("Creating socket...\n");
+	preform_task("Creating socket...",NULL);
 	sock_fd = socket(server->ai_family,server->ai_socktype,server->ai_protocol);
 	if ( sock_fd < 0 ) {
 		error_msg("Could not create a socket");
-		printf("Process killed: %d\n",process_id);
-		freeaddrinfo(server);
+		clean_up(&process_id,NULL,NULL,&server);
 		exit(1);
 	}
 
-	printf("Created Socket FD: %d\n",sock_fd);
-	pass_msg();
+	pass_msg("Created Socket FD:",&sock_fd);
 	
-	printf("Attempting to connect to server...\n");
+	preform_task("Attempting to connect to server...",NULL);
 	status = connect(sock_fd,server->ai_addr,server->ai_addrlen);
 	if ( status < 0 ) {
 		error_msg("Failed to connect server.");
@@ -82,9 +80,10 @@ void start_client(char **argv) {
 		exit(1);
 	}
 
-	freeaddrinfo(server);
-	printf("Connected to %s:%s\n",argv[1],argv[2]);
+	/* Done with linked list */
+	clean_up(NULL,NULL,NULL,&server);
 
+	printf("Connected to %s:%s\n",argv[1],argv[2]);
 	/* Begin Data transfering */
 	while(1) {
 
@@ -107,7 +106,7 @@ void start_client(char **argv) {
 		}
 		else if (strncmp(recieve,"Invalid",7) == 0) {
 			error_msg("Invalid request from server... Closing connection");
-			close(sock_fd);
+			clean_up(NULL,&sock_fd,NULL,NULL);
 			exit(1);
 		}
 
@@ -116,12 +115,12 @@ void start_client(char **argv) {
 		bytes = send(sock_fd,response,strnlen(response,BUFFER),0);
 		if ( bytes == -1 ) {
 			error_msg("Could not recieve bytes from server");
-			close(sock_fd);
+			clean_up(NULL,&sock_fd,NULL,NULL);
 			exit(1);
 		}
 	}
 
-	printf("Process killed: %d\n",process_id);
-	close(sock_fd);
+	preform_task("Process killed:",(int *)&process_id);
+	clean_up(NULL,&sock_fd,NULL,NULL);
 }
 #endif /* End TEST_CLIENT */
