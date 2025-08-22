@@ -1,38 +1,5 @@
-#include "my_net_utils.h"
-
-void format(int count,const char character) {
-
-	for (int i=0 ; i<count ; i++) {
-		putchar(character);
-	}
-	putchar('\n');
-}
-
-void usage(char **argv) {
-	format(40,'-');
-	printf("  Usage: %s [IPv4] [Port].\n",argv[0]);
-	printf("Example: %s 192.168.0.xxx 8000.\n",argv[0]);
-	printf("   Note: Port has to be > 1023. See /etc/protocols.\n");
-
-	format(40,'-');
-}
-
-void error_msg(const char *message) {
-	fprintf(stderr,"%s\n",message);
-}
-
-void pass_msg(void) {
-	int count = 35;	
-	for (int i=0; i < count; i++) {
-		putchar('-');
-		if ( i == count-1 ) {
-			putchar('>');
-			puts(" Done");
-		}
-	} 
-}
-
-#ifdef TEST_SERVER
+#if defined(SERVER)
+#include "net_utility.h"
 #include <pthread.h>
 #include <netinet/in.h>
 #define BACKLOG          10       /* Listen connections */
@@ -62,15 +29,19 @@ void start_server(char **argv) {
 	socklen_t host_port_len;
 
 	/* Information to send and rec */
-	Methods_t requests = { "Get Ok","Put Ok","List Ok","Read Ok"};
+	Methods_t requests = { "Get OK\n","Put OK\n","List OK\n","See OK\n","Help OK\n"};
 
 	/* Initial message to be sent to client after connection */
-	const char *welcome_message = "Hello! Welcome to RPi FTP Server\n"
-								  "Use the following methods:\n"
-								  "Get file_name.txt (download file)\n"
-								  "Put file_name.txt (upload file)\n"
-								  "List files on mounted directory\n"
-								  "Read file_name.txt (see content in file)\n";
+	const char *welcome_message = "-------------------------------\n"
+	                              "| Welcome to RPi FTP Server   |\n"
+                                  "------------------------------|\n"
+								  "| Use the following methods:  |\n"
+                                  "------------------------------|\n"
+								  "| Get a file (download file)  |\n"
+								  "| Put a file (upload file)    |\n"
+								  "| List files in directory     |\n"
+								  "| See file content            |\n"
+                                  "-------------------------------\n";
 	
 	/* Variables need to recieve and response to the client(s) 
 	   Buffer size for recieve and response is 1024 bytes */
@@ -226,7 +197,6 @@ void start_server(char **argv) {
 				error_msg("Could not send get response to client");
 				close(client_fd);
 				close(sock_fd);
-				pass_msg();
 				exit(1);
 			}
 			printf("Server response complete...\n");
@@ -235,7 +205,16 @@ void start_server(char **argv) {
 			break;
 		}
 		else {
-			error_msg("Invalid input disconnecting from client...\n");
+			strncpy(response,"Invalid request... Closing connection\n",sizeof(response)-1);
+
+			bytes = send(client_fd,response,strnlen(response,BUFFER),0);
+			if ( bytes == -1 ) {
+				error_msg("Could not send get response to client");
+				close(client_fd);
+				close(sock_fd);
+				exit(1);
+			}
+			error_msg("Invalid input disconnecting from client...");
 			close(client_fd);
 			close(sock_fd);
 			exit(1);
@@ -246,125 +225,3 @@ void start_server(char **argv) {
 	close(sock_fd);
 }
 #endif /* End TEST_SERVER */
-
-#ifdef TEST_CLIENT
-void start_client(char **argv) {
-	
-	/* Socket File Descriptors
-	   Error Validation     */
-	int sock_fd, status;
-
-	/* Structure to resolving the server information */
-	struct addrinfo hints, *server;
-
-	/* Command line arguments from user
-	   IPv4 max character = 15 + '\0' = 16
-	   Port max character = 5 + '\0' = 6  */
-	char ip[IP_MAX_LEN];
-	char port[PORT_MAX_LEN];
-
-	/* Bytes to recieve or send of a response 
-	   Buffer size of 1024 characters */
-	ssize_t bytes;
-	char response[BUFFER];
-	char recieve[BUFFER];
-
-	/* Gives the process id of the FTP server */
-	pid_t process_id = getpid();
-	printf("Create new process: %d\n",process_id);
-
-	if ( inet_pton(AF_INET,argv[1],ip) == 1 )
-	{
-		strcpy(ip,argv[1]);	
-		strcpy(port,argv[2]);	
-	}
-	else {
-		error_msg("The given arguments are out of max character range");
-		printf("Process killed: %d\n",process_id);
-		usage(argv);
-		exit(1);
-	}
-
-	/* Important to zero out any information in the hints structure             
-	   Server Type:
-	   IPv4
-	   TCP                               
-	   Using user input for IPv4 Server addr                     */
-	memset(&hints,0,sizeof(struct addrinfo));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = 0;
-	hints.ai_flags = 0;
-
-	/* Resolve server information */
-	printf("Resolving server information...\n");
-	status = getaddrinfo(ip,port,&hints,&server);
-	if ( status < 0 ) {
-		error_msg("Could not resolve server information...");
-		printf("Process killed: %d\n",process_id);
-		exit(1);
-	}
-
-	pass_msg();
-	
-	/* Creates a socket descriptor to listen on */
-	printf("Creating socket...\n");
-	sock_fd = socket(server->ai_family,server->ai_socktype,server->ai_protocol);
-	if ( sock_fd < 0 ) {
-		error_msg("Could not create a socket");
-		printf("Process killed: %d\n",process_id);
-		freeaddrinfo(server);
-		exit(1);
-	}
-
-	printf("Created Socket FD: %d\n",sock_fd);
-	pass_msg();
-	
-	printf("Attempting to connect to server...\n");
-	status = connect(sock_fd,server->ai_addr,server->ai_addrlen);
-	if ( status < 0 ) {
-		error_msg("Failed to connect server.");
-		printf("Process killed: %d\n",process_id);
-		close(sock_fd);
-		freeaddrinfo(server);
-		exit(1);
-	}
-
-	freeaddrinfo(server);
-	printf("Connected to %s:%s\n",argv[1],argv[2]);
-
-	/* Begin Data transfering */
-	while(1) {
-
-		/* Zero out the buffers to avoid recieve old data */
-		memset(recieve,0,sizeof(recieve));
-		memset(response,0,sizeof(response));
-
-		bytes = recv(sock_fd,recieve,sizeof(recieve),0);
-		if ( bytes == -1 ) {
-			error_msg("Could not recieve bytes from server");
-			close(sock_fd);
-			exit(1);
-		}
-		printf("%s",recieve);
-
-		if (strncmp(recieve,"Get",3) == 0) {
-			printf("Transfer complete\n");
-			printf("Closing connection...\n");
-			break;
-		}
-
-		printf("$ ");
-		fgets(response,BUFFER-1,stdin);
-		bytes = send(sock_fd,response,strnlen(response,BUFFER),0);
-		if ( bytes == -1 ) {
-			error_msg("Could not recieve bytes from server");
-			close(sock_fd);
-			exit(1);
-		}
-	}
-
-	printf("Process killed: %d\n",process_id);
-	close(sock_fd);
-}
-#endif /* End TEST_CLIENT */

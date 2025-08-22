@@ -1,5 +1,5 @@
-#ifndef MY_NET_UTILS_H  
-#define MY_NET_UTILS_H  
+#ifndef NET_UTILITY_H  
+#define NET_UTILITY_H  
 
 /* Standard C libraries for 
    I/O 
@@ -35,15 +35,16 @@ typedef struct {
 	const char *get;	/* To download file from server to local */
 	const char *put;	/* To upload file from local to server */
 	const char *list;	/* To list files on the server directory */
-	const char *read;	/* To read a file from server into local stdout */
+	const char *see;	/* To see a file from server into local stdout */
+	const char *help;	/* To get help of how to use API */
 } Methods_t;
 
-#ifdef TEST_SERVER
+#if defined(SERVER)
 	void start_server(char **argv);
 #endif
 
-#ifdef TEST_CLIENT
+#if defined(CLIENT)
 	void start_client(char **argv);
 #endif
 
-#endif /* MY_NET_UTILS_H */
+#endif /* NET_UTILITY_H */
