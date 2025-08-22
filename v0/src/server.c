@@ -32,16 +32,16 @@ void start_server(char **argv) {
 	Methods_t requests = { "Get OK\n","Put OK\n","List OK\n","See OK\n","Help OK\n"};
 
 	/* Initial message to be sent to client after connection */
-	const char *welcome_message = "-------------------------------\n"
-	                              "| Welcome to RPi FTP Server   |\n"
-                                  "------------------------------|\n"
-								  "| Use the following methods:  |\n"
-                                  "------------------------------|\n"
-								  "| Get a file (download file)  |\n"
-								  "| Put a file (upload file)    |\n"
-								  "| List files in directory     |\n"
-								  "| See file content            |\n"
-                                  "-------------------------------\n";
+	const char *welcome_message = "--------------------------------\n"
+	                              "|  Welcome to RPi FTP Server   |\n"
+                                  "|------------------------------|\n"
+								  "|  Use the following methods:  |\n"
+                                  "|------------------------------|\n"
+								  "|  Get a file (download file)  |\n"
+								  "|  Put a file (upload file)    |\n"
+								  "|  List files in directory     |\n"
+								  "|  See file content            |\n"
+                                  "--------------------------------\n";
 	
 	/* Variables need to recieve and response to the client(s) 
 	   Buffer size for recieve and response is 1024 bytes */
