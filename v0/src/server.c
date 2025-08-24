@@ -29,7 +29,7 @@ void start_server(char **argv) {
 	socklen_t host_port_len;
 
 	/* Information to send and rec */
-	Methods_t requests = { "Get OK\n","Put OK\n","List OK\n","See OK\n","Help OK\n"};
+	Methods_t requests = { "Get OK\n","Put OK\n","List OK\n","See OK\n"};
 
 	/* Initial message to be sent to client after connection */
 	const char *welcome_message = "--------------------------------\n"

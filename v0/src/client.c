@@ -23,7 +23,7 @@ void start_client(char **argv) {
 
 	/* Gives the process id of the FTP server */
 	pid_t process_id = getpid();
-	preform_task("Create new process:",(int *)&process_id);
+	perform_task("Create new process:",(int *)&process_id);
 
 	if ( inet_pton(AF_INET,argv[1],ip) == 1 )
 	{
@@ -49,7 +49,7 @@ void start_client(char **argv) {
 	hints.ai_flags = 0;
 
 	/* Resolve server information */
-	preform_task("Resolving server information...",NULL);
+	perform_task("Resolving server information...",NULL);
 	status = getaddrinfo(ip,port,&hints,&server);
 	if ( status < 0 ) {
 		error_msg("Could not resolve server information...");
@@ -60,7 +60,7 @@ void start_client(char **argv) {
 	pass_msg(NULL,NULL);
 	
 	/* Creates a socket descriptor to listen on */
-	preform_task("Creating socket...",NULL);
+	perform_task("Creating socket...",NULL);
 	sock_fd = socket(server->ai_family,server->ai_socktype,server->ai_protocol);
 	if ( sock_fd < 0 ) {
 		error_msg("Could not create a socket");
@@ -70,7 +70,7 @@ void start_client(char **argv) {
 
 	pass_msg("Created Socket FD:",&sock_fd);
 	
-	preform_task("Attempting to connect to server...",NULL);
+	perform_task("Attempting to connect to server...",NULL);
 	status = connect(sock_fd,server->ai_addr,server->ai_addrlen);
 	if ( status < 0 ) {
 		error_msg("Failed to connect server.");
@@ -120,7 +120,7 @@ void start_client(char **argv) {
 		}
 	}
 
-	preform_task("Process killed:",(int *)&process_id);
+	perform_task("Process killed:",(int *)&process_id);
 	clean_up(NULL,&sock_fd,NULL,NULL);
 }
 #endif /* End TEST_CLIENT */
