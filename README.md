@@ -56,8 +56,8 @@ Methods:
 
 Raspberry Pi
 
-<table align="center">
-	<thead>
+<table>
+	<thead align="center">
 		<tr>
 			<th colspan="2">Build of Materials</>
 		</tr>
@@ -66,7 +66,7 @@ Raspberry Pi
 			<th>Description</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody align="center">
 		<tr>
 			<td>1</td>
 			<td>Raspberry Pi 5</td>
