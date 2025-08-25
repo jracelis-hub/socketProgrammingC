@@ -54,6 +54,36 @@ To run the following program a linux environment is needed. I have tested this o
 
 Methods:
 
+Raspberry Pi
+
+<table align="center">
+	<thead>
+		<td>
+			<th colspan="2">Build of Materials</>
+		</td>
+		<td>
+			<th>Quantity</th>
+			<th>Description</th>
+		</td>
+	</thead>
+	<tbody>
+		<td>
+			<tr>1</tr>
+			<tr>Raspberry Pi 5</tr>
+		</td>
+		<td>
+			<tr>1</tr>
+			<tr>Power Supply 5V 5Amps</tr>
+		</td>
+		<td>
+			<tr>1</tr>
+			<tr>Micro SD Card 32GB+</tr>
+		</td>
+	</tbody>
+</table>
+
+To get the raspberry pi up and running
+
 WSL 
 
 To install WSL on Windows open up the command prompt and type:
