@@ -58,27 +58,27 @@ Raspberry Pi
 
 <table align="center">
 	<thead>
-		<td>
+		<tr>
 			<th colspan="2">Build of Materials</>
-		</td>
-		<td>
+		</tr>
+		<tr>
 			<th>Quantity</th>
 			<th>Description</th>
-		</td>
+		</tr>
 	</thead>
 	<tbody>
-		<td>
-			<tr>1</tr>
-			<tr>Raspberry Pi 5</tr>
-		</td>
-		<td>
-			<tr>1</tr>
-			<tr>Power Supply 5V 5Amps</tr>
-		</td>
-		<td>
-			<tr>1</tr>
-			<tr>Micro SD Card 32GB+</tr>
-		</td>
+		<tr>
+			<td>1</td>
+			<td>Raspberry Pi 5</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>Power Supply 5V 5Amps</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>Micro SD Card 32GB+</td>
+		</tr>
 	</tbody>
 </table>
 
